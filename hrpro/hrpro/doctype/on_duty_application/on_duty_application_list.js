@@ -1,9 +1,13 @@
 frappe.listview_settings['On Duty Application'] = {
+	onload() {
+		frappe.breadcrumbs.add('HR');
+	},
 	add_fields: ["status"],
 	get_indicator: function(doc) {
 		return [__(doc.status), frappe.utils.guess_colour(doc.status),
 			"status,=," + doc.status];
 	},
+
     // onload:function(listview){
 	// 	frappe.model.get_value('Employee', { 'user_id': frappe.session.user }, 'employee_number',
     //         function (data) {

@@ -17,7 +17,7 @@
   "in_time",
   "out_time",
   "qr_scan_time",
-  "reason",
+  "correction",
   "amended_from"
  ],
  "fields": [
@@ -26,13 +26,15 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Employee",
-   "options": "Employee"
+   "options": "Employee",
+   "read_only": 1
   },
   {
    "fetch_from": "employee.employee_name",
    "fieldname": "employee_name",
    "fieldtype": "Data",
-   "label": "Employee Name"
+   "label": "Employee Name",
+   "read_only": 1
   },
   {
    "fieldname": "approver",
@@ -56,23 +58,20 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Applied\nApproved By HOD\nApproved By HR",
+   "options": "Applied\nApproved By HOD\nApproved By HR\nRejected",
    "read_only": 1
   },
   {
    "fieldname": "in_time",
    "fieldtype": "Datetime",
-   "label": "In Time"
+   "label": "In Time",
+   "read_only": 1
   },
   {
    "fieldname": "out_time",
    "fieldtype": "Datetime",
-   "label": "Out Time"
-  },
-  {
-   "fieldname": "reason",
-   "fieldtype": "Small Text",
-   "label": "Reason(Must Contain At least 10 Words)"
+   "label": "Out Time",
+   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -86,25 +85,34 @@
   {
    "fieldname": "qr_scan_time",
    "fieldtype": "Datetime",
-   "label": "QR Scan Time"
+   "label": "QR Scan Time",
+   "read_only": 1
   },
   {
    "fieldname": "attendance",
    "fieldtype": "Link",
    "label": "Attendance",
-   "options": "Attendance"
+   "options": "Attendance",
+   "read_only": 1
   },
   {
    "fetch_from": "employee.department",
    "fieldname": "department",
    "fieldtype": "Link",
    "label": "Department",
-   "options": "Department"
+   "options": "Department",
+   "read_only": 1
+  },
+  {
+   "fieldname": "correction",
+   "fieldtype": "Select",
+   "label": "Correction",
+   "options": "\nIN Time\nOUT Time\nQR Scan Time"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2021-05-08 10:55:40.705446",
+ "modified": "2021-05-25 07:07:01.001157",
  "modified_by": "Administrator",
  "module": "Hrpro",
  "name": "Miss Punch Application",

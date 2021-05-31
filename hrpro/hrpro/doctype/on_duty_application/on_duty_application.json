@@ -19,15 +19,23 @@
   "half_day",
   "half_day_date",
   "total_number_of_days",
-  "column_break1",
   "from_date_session",
-  "to_date_session",
+  "column_break1",
+  "from_time",
+  "to_time",
+  "vehicle_request",
+  "approval_mark",
   "section_break_16",
+  "multi_employee",
+  "section_break_19",
   "employee",
   "employee_name",
-  "column_break_21",
+  "address",
   "approver",
   "approver_name",
+  "column_break_21",
+  "person_to_meet",
+  "company_name",
   "description",
   "section_break_7",
   "grade",
@@ -67,9 +75,10 @@
    "options": "Open\nApproved\nRejected"
   },
   {
-   "default": "Applied",
+   "default": "Approved",
    "fieldname": "status",
    "fieldtype": "Select",
+   "hidden": 1,
    "in_standard_filter": 1,
    "label": "Status",
    "no_copy": 1,
@@ -84,16 +93,17 @@
    "default": "On Duty",
    "fieldname": "on_duty_type",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "On Duty Type",
    "options": "\nOn Duty",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "section_break_5",
    "fieldtype": "Section Break"
   },
   {
+   "bold": 1,
    "fieldname": "from_date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -103,6 +113,7 @@
    "search_index": 1
   },
   {
+   "bold": 1,
    "fieldname": "to_date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -141,13 +152,8 @@
    "fieldname": "from_date_session",
    "fieldtype": "Select",
    "label": "Session",
-   "options": "Full Day\nFirst Half\nSecond Half"
-  },
-  {
-   "fieldname": "to_date_session",
-   "fieldtype": "Select",
-   "label": "Session",
-   "options": "Full Day\nFirst Half\nSecond Half"
+   "options": "Full Day\nFirst Half\nSecond Half",
+   "reqd": 1
   },
   {
    "fieldname": "section_break_16",
@@ -156,18 +162,16 @@
   {
    "fieldname": "employee",
    "fieldtype": "Link",
-   "in_global_search": 1,
-   "in_standard_filter": 1,
-   "label": "Employee",
-   "options": "Employee",
-   "reqd": 1,
-   "search_index": 1
+   "hidden": 1,
+   "label": "Employee ID",
+   "options": "Employee"
   },
   {
    "fetch_from": "employee.employee_name",
    "fieldname": "employee_name",
-   "fieldtype": "Read Only",
-   "in_global_search": 1,
+   "fieldtype": "Data",
+   "hidden": 1,
+   "in_list_view": 1,
    "label": "Employee Name"
   },
   {
@@ -175,11 +179,12 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "employee.leave_approver",
+   "fetch_from": "employee.od_approver",
    "fieldname": "approver",
    "fieldtype": "Link",
    "label": "Approver",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   },
   {
    "fetch_from": "approver.full_name",
@@ -190,13 +195,14 @@
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
-   "label": "Reason",
+   "label": "Purpose",
    "reqd": 1
   },
   {
    "collapsible": 1,
    "fieldname": "section_break_7",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Employee Details"
   },
   {
@@ -234,6 +240,7 @@
    "collapsible": 1,
    "fieldname": "sb10",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Company Details"
   },
   {
@@ -281,13 +288,64 @@
    "options": "On Duty Application",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "from_time",
+   "fieldtype": "Time",
+   "label": "From TIme",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_time",
+   "fieldtype": "Time",
+   "label": "To TIme",
+   "reqd": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "address",
+   "fieldtype": "Data",
+   "label": "Address",
+   "reqd": 1
+  },
+  {
+   "fieldname": "person_to_meet",
+   "fieldtype": "Data",
+   "label": "Person to meet",
+   "reqd": 1
+  },
+  {
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "multi_employee",
+   "fieldtype": "Table",
+   "options": "Multi Employee"
+  },
+  {
+   "fieldname": "section_break_19",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "approval_mark",
+   "fieldtype": "HTML",
+   "label": "Approval Mark"
+  },
+  {
+   "default": "0",
+   "fieldname": "vehicle_request",
+   "fieldtype": "Check",
+   "label": "Vehicle Request"
   }
  ],
  "icon": "fa fa-calendar",
  "is_submittable": 1,
  "links": [],
  "max_attachments": 3,
- "modified": "2021-03-23 10:47:16.489856",
+ "modified": "2021-05-26 23:02:50.621933",
  "modified_by": "Administrator",
  "module": "Hrpro",
  "name": "On Duty Application",
@@ -368,6 +426,5 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "timeline_field": "employee",
- "title_field": "employee_name",
  "track_changes": 1
 }

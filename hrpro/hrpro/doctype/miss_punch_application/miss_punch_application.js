@@ -3,7 +3,7 @@
 
 frappe.ui.form.on('Miss Punch Application', {
 	refresh: function (frm) {
-
+		frm.disable_save()
 	},
 	// validate: function (frm) {
 	// 	if ((frm.doc.attendance_date >= frappe.datetime.nowdate()) && frm.doc.attendance_date) {

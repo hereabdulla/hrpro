@@ -147,9 +147,9 @@ def get_template():
     frappe.errprint(formatted_value)
 
     # write out response as a type csv
-    frappe.response['result'] = cstr(formatted_value)
-    frappe.response['type'] = 'txt'
-    frappe.response['doctype'] = "PF Form"
+    # frappe.response['result'] = cstr(formatted_value)
+    # frappe.response['type'] = 'txt'
+    # frappe.response['doctype'] = "PF Form"
 
 @frappe.whitelist()
 def get_years():

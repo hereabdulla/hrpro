@@ -20,12 +20,36 @@ class OnDutyApplication(Document):
     def on_submit(self):
         if self.status == "Applied":
             frappe.throw(_("Only Applications with status 'Approved' and 'Rejected' can be submitted"))
-        # if self.status == "Approved":
-        #     update_attendance_by_app(self.employee,self.from_date,self.to_date,self.from_date_session,self.to_date_session,"OD")
+        if self.workflow_state == "Approved":
+            no_of_days = date_diff(add_days(self.to_date, 1),self.from_date )
+            dates = [add_days(self.from_date, i) for i in range(0, no_of_days)]
+            for emp in self.multi_employee:
+                for date in dates:
+                    att = frappe.db.exists("Attendance",{"attendance_date":date,"employee":emp.employee,"docstatus":["!=","2"]})
+                    if att:
+                        doc = frappe.get_doc("Attendance",att)
+                        frappe.errprint(doc)
+                        if doc.docstatus == 0:
+                            doc.status = 'Present'
+                            doc.on_duty_application = self.name
+                            doc.save(ignore_permissions=True)
+                            doc.submit()
+                            frappe.db.commit()
+                        elif doc.docstatus == 1:
+                            doc.cancel()
+                            doc = frappe.new_doc("Attendance")
+                            doc.employee = emp.employee
+                            doc.attendance_date = date
+                            doc.status = 'Present'
+                            doc.on_duty_application = self.name
+                            doc.save(ignore_permissions=True)
+                            doc.submit()
+                            frappe.db.commit()
 
-    def validate(self):
-        # self.validate_approver()
-        self.validate_od_overlap()	
+
+    # def validate(self):
+    #     # self.validate_approver()
+    #     self.validate_od_overlap()	
 
     def validate_approver(self):
         if not frappe.session.user == 'hr.hdi@hunterdouglas.asia':
