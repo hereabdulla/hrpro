@@ -5,12 +5,22 @@ frappe.ui.form.on('On Duty Application', {
     onload:function(frm){
         if(frm.doc.workflow_state == 'Review Pending'){
             frm.fields_dict.approval_mark.$wrapper.empty()
+            frm.fields_dict.html.$wrapper.empty()
         }
         
     },
     refresh: function (frm) {
+        frm.fields_dict.html.$wrapper.empty()
+        frm.fields_dict.approval_mark.$wrapper.empty()
+        if(!frm.is_new()){
+        if (frm.doc.workflow_state == 'Approved') {
+            frm.call('show_html').then(r=>{
+                frm.fields_dict.html.$wrapper.empty().append(r.message)
+            })
+        }
+    }
 		// $(frm.fields_dict.address.input).css({ 'font-weight':'bold' })
-		$(frm.fields_dict.from_date.input).css("backgroundColor", "DarkOrange");
+		// $(frm.fields_dict.from_date.input).css("backgroundColor", "DarkOrange");
 		// frm.set_df_property("from_date", "label", "<strong>From Date</string>")
 		// frm.set_df_property("from_date", "value", "<strong>20-05-2021</string>")
 

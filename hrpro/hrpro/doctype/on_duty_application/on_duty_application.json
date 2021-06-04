@@ -7,6 +7,10 @@
  "document_type": "Document",
  "engine": "InnoDB",
  "field_order": [
+  "html",
+  "cb",
+  "approval_mark",
+  "section_break_4",
   "naming_series",
   "is_from_ar",
   "approval_status",
@@ -24,7 +28,6 @@
   "from_time",
   "to_time",
   "vehicle_request",
-  "approval_mark",
   "section_break_16",
   "multi_employee",
   "section_break_19",
@@ -339,13 +342,25 @@
    "fieldname": "vehicle_request",
    "fieldtype": "Check",
    "label": "Vehicle Request"
+  },
+  {
+   "fieldname": "html",
+   "fieldtype": "HTML"
+  },
+  {
+   "fieldname": "cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break"
   }
  ],
  "icon": "fa fa-calendar",
  "is_submittable": 1,
  "links": [],
  "max_attachments": 3,
- "modified": "2021-05-26 23:02:50.621933",
+ "modified": "2021-05-31 15:35:09.843848",
  "modified_by": "Administrator",
  "module": "Hrpro",
  "name": "On Duty Application",

@@ -51,6 +51,10 @@ class OnDutyApplication(Document):
     #     # self.validate_approver()
     #     self.validate_od_overlap()	
 
+    def show_html(self):
+            html = "<table class='table table-bordered'><tr><th>From Date</th><th>To Date</th></tr><tr><td><h2>%s</h2></td><td><h2>%s</h2></td></tr><tr><th>From Time</th><th>To Time</th></tr><tr><td><h2>%s</h2></td><td><h2>%s</h2></td></tr></table>"%(frappe.utils.format_date(self.from_date),frappe.utils.format_date(self.to_date),self.from_time,self.to_time)
+            return html
+
     def validate_approver(self):
         if not frappe.session.user == 'hr.hdi@hunterdouglas.asia':
             employee = frappe.get_doc("Employee", self.employee)
