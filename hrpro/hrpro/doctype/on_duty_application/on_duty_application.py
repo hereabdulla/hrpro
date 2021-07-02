@@ -50,11 +50,15 @@ class OnDutyApplication(Document):
     # def validate(self):
     #     # self.validate_approver()
     #     self.validate_od_overlap()	
-
+    @frappe.whitelist()
     def show_html(self):
-            html = "<table class='table table-bordered'><tr><th>From Date</th><th>To Date</th></tr><tr><td><h2>%s</h2></td><td><h2>%s</h2></td></tr><tr><th>From Time</th><th>To Time</th></tr><tr><td><h2>%s</h2></td><td><h2>%s</h2></td></tr></table>"%(frappe.utils.format_date(self.from_date),frappe.utils.format_date(self.to_date),self.from_time,self.to_time)
-            return html
+        if self.vehicle_request:
+            html = "<h2><center>ON DUTY APPLICATION WITH VEHICLE</center></h2><table class='table table-bordered'><tr><th>From Date</th><th>To Date</th></tr><tr><td><h2>%s</h2></td><td><h2>%s</h2></td></tr><tr><th>From Time</th><th>To Time</th></tr><tr><td><h2>%s</h2></td><td><h2>%s</h2></td></tr></table>"%(frappe.utils.format_date(self.from_date),frappe.utils.format_date(self.to_date),self.from_time,self.to_time)
+        else:
+            html = "<h2><center>ON DUTY APPLICATION</center></h2><table class='table table-bordered'><tr><th>From Date</th><th>To Date</th></tr><tr><td><h2>%s</h2></td><td><h2>%s</h2></td></tr><tr><th>From Time</th><th>To Time</th></tr><tr><td><h2>%s</h2></td><td><h2>%s</h2></td></tr></table>"%(frappe.utils.format_date(self.from_date),frappe.utils.format_date(self.to_date),self.from_time,self.to_time)
+        return html
 
+    @frappe.whitelist()
     def validate_approver(self):
         if not frappe.session.user == 'hr.hdi@hunterdouglas.asia':
             employee = frappe.get_doc("Employee", self.employee)
@@ -76,6 +80,7 @@ class OnDutyApplication(Document):
                 frappe.throw(_("Only the selected Approver can submit this Application"),
                     LeaveApproverIdentityError)
     
+    @frappe.whitelist()
     def validate_od_overlap(self):
         if not self.name:
             # hack! if name is null, it could cause problems with !=
@@ -105,12 +110,14 @@ class OnDutyApplication(Document):
             else:
                 self.throw_overlap_error(d)
 
+    @frappe.whitelist()
     def throw_overlap_error(self, d):
         msg = _("Employee {0} has already applied for {1} between {2} and {3}").format(self.employee,
             d['on_duty_type'], formatdate(d['from_date']), formatdate(d['to_date'])) \
             + """ <br><b><a href="#Form/On Duty Application/{0}">{0}</a></b>""".format(d["name"])
         frappe.throw(msg, OverlapError)
 
+    @frappe.whitelist()
     def get_total_leaves_on_half_day(self):
         leave_count_on_half_day_date = frappe.db.sql("""select count(name) from `tabOn Duty Application`
             where employee = %(employee)s
@@ -132,6 +139,21 @@ class OnDutyApplication(Document):
     #         for attendance in attendance_list:
     #             attendance_obj = frappe.get_doc("Attendance", attendance['name'])
     #             attendance_obj.cancel()
+
+    @frappe.whitelist()
+    def get_ceo(self,department):
+        ceo = frappe.db.get_value('Department',department,"ceo")
+        return ceo
+    
+    @frappe.whitelist()
+    def get_gm(self,department):
+        gm = frappe.db.get_value('Department',department,"gm")
+        return gm
+
+    @frappe.whitelist()
+    def get_hod(self,department):
+        hod = frappe.db.get_value('Department',department,"hod")
+        return hod
 
 
 @frappe.whitelist()

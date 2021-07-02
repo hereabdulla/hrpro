@@ -31,18 +31,18 @@
   "section_break_16",
   "multi_employee",
   "section_break_19",
-  "employee",
-  "employee_name",
   "address",
   "approver",
   "approver_name",
+  "employee",
+  "employee_name",
+  "department",
   "column_break_21",
   "person_to_meet",
   "company_name",
   "description",
   "section_break_7",
   "grade",
-  "department",
   "category",
   "business_unit",
   "column_break_15",
@@ -165,24 +165,23 @@
   {
    "fieldname": "employee",
    "fieldtype": "Link",
-   "hidden": 1,
-   "label": "Employee ID",
-   "options": "Employee"
+   "label": "Request By (Employee ID)",
+   "options": "Employee",
+   "read_only": 1
   },
   {
    "fetch_from": "employee.employee_name",
    "fieldname": "employee_name",
    "fieldtype": "Data",
-   "hidden": 1,
    "in_list_view": 1,
-   "label": "Employee Name"
+   "label": "Requested By",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_21",
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "employee.od_approver",
    "fieldname": "approver",
    "fieldtype": "Link",
    "label": "Approver",
@@ -217,8 +216,10 @@
   {
    "fetch_from": "employee.department",
    "fieldname": "department",
-   "fieldtype": "Read Only",
-   "label": "Department"
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department",
+   "read_only": 1
   },
   {
    "fieldname": "category",
@@ -360,7 +361,7 @@
  "is_submittable": 1,
  "links": [],
  "max_attachments": 3,
- "modified": "2021-05-31 15:35:09.843848",
+ "modified": "2021-06-24 18:35:52.558088",
  "modified_by": "Administrator",
  "module": "Hrpro",
  "name": "On Duty Application",
@@ -441,5 +442,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "timeline_field": "employee",
+ "title_field": "employee_name",
  "track_changes": 1
 }

@@ -1,13 +1,14 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:subcontractor_id",
+ "autoname": "field:contractor",
  "creation": "2020-09-21 10:33:55.832030",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "subcontractor_id",
+  "contractor",
+  "contractors_company",
   "short_code",
   "column_break_2",
   "job_order",
@@ -89,6 +90,7 @@
   {
    "fieldname": "job_order",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Job Order",
    "options": "Job Order"
   },
@@ -100,17 +102,7 @@
   {
    "fieldname": "subcontractor_name",
    "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Name of the contractor 's establishment",
-   "reqd": 1
-  },
-  {
-   "fieldname": "subcontractor_id",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Contractor",
-   "reqd": 1,
-   "unique": 1
+   "label": "Name of the contractor 's establishment"
   },
   {
    "fieldname": "contact_no",
@@ -410,10 +402,8 @@
    "description": "Capital Letter without Space",
    "fieldname": "short_code",
    "fieldtype": "Data",
-   "label": "Contractor Short Code",
-   "reqd": 1,
-   "set_only_once": 1,
-   "unique": 1
+   "hidden": 1,
+   "label": "Contractor Short Code"
   },
   {
    "fieldname": "registered_contractor_details_section",
@@ -449,11 +439,27 @@
    "fieldname": "group_insurance",
    "fieldtype": "Table",
    "options": "Group Personal Accident Insurance"
+  },
+  {
+   "description": "Shortcode",
+   "fieldname": "contractor",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Contractor",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "contractors_company",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Contractor's Company",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-03-20 18:10:53.428319",
+ "modified": "2021-06-21 14:25:37.670940",
  "modified_by": "Administrator",
  "module": "Hrpro",
  "name": "Contractor",
