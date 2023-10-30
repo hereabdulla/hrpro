@@ -354,7 +354,6 @@ def execute(filters=None):
                 elif early_out and early_out > timedelta(minutes=6):
                     row += ["PR","AB"]  
                 else:
-                    # frappe.errprint('hi')
                     # frappe.errprint(att.attendance_date)  
                     row += ["PR","PR"]
             else:

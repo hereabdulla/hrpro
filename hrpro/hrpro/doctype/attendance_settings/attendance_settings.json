@@ -7,11 +7,26 @@
  "field_order": [
   "from_date",
   "column_break_2",
+  "process_attendance",
+  "column_break_4",
+  "process_overtime",
+  "column_break_6",
+  "update_status",
   "mark_permission",
   "mark_on_duty",
-  "process_attendance",
+  "column_break_10",
+  "urc_to_ec",
+  "section_break_8",
+  "employee_type",
+  "column_break_14",
+  "submit_attendance",
   "application_cut_off_dates",
-  "cut_off_dates"
+  "cut_off_dates",
+  "section_break_15",
+  "view_salary_slip",
+  "update_checkin_section",
+  "attach_file",
+  "process_checkin"
  ],
  "fields": [
   {
@@ -53,12 +68,86 @@
    "fieldname": "process_attendance",
    "fieldtype": "Button",
    "label": "Process Attendance"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Submit Attendance only before Payroll Processing.",
+   "fieldname": "submit_attendance",
+   "fieldtype": "Button",
+   "label": "Submit Attendance"
+  },
+  {
+   "fieldname": "update_status",
+   "fieldtype": "Button",
+   "label": "Update Status"
+  },
+  {
+   "fieldname": "section_break_8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "employee_type",
+   "fieldtype": "Select",
+   "label": "Employee Type",
+   "options": "\nWC\nBC\nFT\nNT\nCL\nTH"
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "view_salary_slip",
+   "fieldtype": "Button",
+   "label": "View Salary Slip"
+  },
+  {
+   "fieldname": "section_break_15",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Salary Slip"
+  },
+  {
+   "fieldname": "process_overtime",
+   "fieldtype": "Button",
+   "label": "Process Overtime"
+  },
+  {
+   "fieldname": "attach_file",
+   "fieldtype": "Attach",
+   "label": "Attach File"
+  },
+  {
+   "fieldname": "process_checkin",
+   "fieldtype": "Button",
+   "label": "Process Checkin"
+  },
+  {
+   "fieldname": "update_checkin_section",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Update Checkin"
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "urc_to_ec",
+   "fieldtype": "Button",
+   "label": "Process Checkin"
+  },
+  {
+   "fieldname": "column_break_14",
+   "fieldtype": "Column Break"
   }
  ],
  "hide_toolbar": 1,
  "issingle": 1,
  "links": [],
- "modified": "2021-05-24 12:45:28.094808",
+ "modified": "2023-04-29 23:38:06.452072",
  "modified_by": "Administrator",
  "module": "Hrpro",
  "name": "Attendance Settings",

@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_copy": 1,
  "autoname": "MP-.####",
  "creation": "2019-06-18 10:08:44.888403",
  "doctype": "DocType",
@@ -8,26 +9,28 @@
  "field_order": [
   "employee",
   "employee_name",
-  "approver",
   "attendance",
-  "attendance_date",
   "department",
+  "employee_type",
+  "approver",
   "column_break_4",
-  "status",
+  "attendance_date",
   "in_time",
   "out_time",
-  "qr_scan_time",
+  "qr_shift",
   "correction",
-  "amended_from"
+  "amended_from",
+  "show_time"
  ],
  "fields": [
   {
    "fieldname": "employee",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Employee",
    "options": "Employee",
-   "read_only": 1
+   "reqd": 1
   },
   {
    "fetch_from": "employee.employee_name",
@@ -47,31 +50,27 @@
    "fieldname": "attendance_date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Attendance Date"
+   "label": "Date",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_4",
    "fieldtype": "Column Break"
   },
   {
-   "default": "Applied",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Applied\nApproved By HOD\nApproved By HR\nRejected",
-   "read_only": 1
-  },
-  {
+   "depends_on": "eval:doc.show_time",
    "fieldname": "in_time",
    "fieldtype": "Datetime",
    "label": "In Time",
-   "read_only": 1
+   "mandatory_depends_on": "eval:doc.show_time",
+   "reqd": 1
   },
   {
+   "depends_on": "eval:doc.show_time",
    "fieldname": "out_time",
    "fieldtype": "Datetime",
    "label": "Out Time",
-   "read_only": 1
+   "mandatory_depends_on": "eval:doc.show_time"
   },
   {
    "fieldname": "amended_from",
@@ -80,12 +79,6 @@
    "no_copy": 1,
    "options": "Miss Punch Application",
    "print_hide": 1,
-   "read_only": 1
-  },
-  {
-   "fieldname": "qr_scan_time",
-   "fieldtype": "Datetime",
-   "label": "QR Scan Time",
    "read_only": 1
   },
   {
@@ -106,13 +99,36 @@
   {
    "fieldname": "correction",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Correction",
    "options": "\nIN Time\nOUT Time\nQR Scan Time"
+  },
+  {
+   "depends_on": "eval:doc.show_time && doc.employee_type != \"WC\"",
+   "fieldname": "qr_shift",
+   "fieldtype": "Link",
+   "label": "QR Shift",
+   "mandatory_depends_on": "eval:doc.show_time && doc.employee_type != \"WC\"",
+   "options": "Shift Type"
+  },
+  {
+   "fetch_from": "employee.employee_type",
+   "fieldname": "employee_type",
+   "fieldtype": "Data",
+   "label": "Employee Type",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "show_time",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "show_time"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2021-05-25 07:07:01.001157",
+ "modified": "2023-05-26 17:11:48.295768",
  "modified_by": "Administrator",
  "module": "Hrpro",
  "name": "Miss Punch Application",

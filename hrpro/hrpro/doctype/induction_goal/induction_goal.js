@@ -69,7 +69,6 @@ frappe.ui.form.on('Induction Goal', {
 	},
 	
 	// make_default_row: function (frm) {
-	// 	console.log("hi")
     //     var child1 =[]
 		
 	// },

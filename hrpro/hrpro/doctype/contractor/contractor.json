@@ -11,6 +11,8 @@
   "contractors_company",
   "short_code",
   "column_break_2",
+  "status",
+  "employee_series",
   "job_order",
   "registered_contractor_details_section",
   "rc_child",
@@ -455,11 +457,25 @@
    "in_list_view": 1,
    "label": "Contractor's Company",
    "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "\nActive\nIn-Active"
+  },
+  {
+   "fieldname": "employee_series",
+   "fieldtype": "Data",
+   "label": "Employee Series",
+   "reqd": 1,
+   "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-06-21 14:25:37.670940",
+ "modified": "2023-04-29 23:55:49.532339",
  "modified_by": "Administrator",
  "module": "Hrpro",
  "name": "Contractor",

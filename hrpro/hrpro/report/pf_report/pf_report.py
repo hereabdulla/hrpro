@@ -49,7 +49,7 @@ def execute(filters=None):
 
         basic = frappe.db.get_value("Salary Detail", {'abbr': 'B', 'parent': ss.name}, ['amount'])
         epsw = flt(15000)
-        if basic:            
+        if basic:
             if epsw < basic:
                 row += [basic, epsw, epsw]
             else:

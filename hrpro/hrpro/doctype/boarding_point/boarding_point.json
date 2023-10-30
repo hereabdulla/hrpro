@@ -13,19 +13,23 @@
   {
    "fieldname": "boarding_point",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Boarding Point",
+   "reqd": 1,
    "unique": 1
   },
   {
    "fieldname": "route_no",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Route No",
-   "options": "Route No"
+   "options": "Route No",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-04-21 13:08:56.383888",
+ "modified": "2023-09-27 06:49:54.064572",
  "modified_by": "Administrator",
  "module": "Hrpro",
  "name": "Boarding Point",

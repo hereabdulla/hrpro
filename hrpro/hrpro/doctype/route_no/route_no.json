@@ -6,7 +6,8 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "route_no"
+  "route_no",
+  "capacity"
  ],
  "fields": [
   {
@@ -14,11 +15,16 @@
    "fieldtype": "Data",
    "label": "Route No",
    "unique": 1
+  },
+  {
+   "fieldname": "capacity",
+   "fieldtype": "Int",
+   "label": "Capacity"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-04-21 10:47:01.444476",
+ "modified": "2022-12-27 12:46:44.169231",
  "modified_by": "Administrator",
  "module": "Hrpro",
  "name": "Route No",

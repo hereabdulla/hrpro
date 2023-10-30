@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_rename": 1,
  "autoname": "field:year",
  "creation": "2021-03-23 13:46:34.431528",
  "doctype": "DocType",
@@ -20,7 +21,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-03-23 13:46:34.431528",
+ "modified": "2021-07-14 20:55:57.341813",
  "modified_by": "Administrator",
  "module": "Hrpro",
  "name": "Year",

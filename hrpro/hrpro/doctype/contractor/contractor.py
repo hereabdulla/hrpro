@@ -49,3 +49,19 @@ def rc_wc_expiry_alert():
 				subject='RC Expiry Alert',
 				message="""%s"""%(content)
 			)
+
+
+def emp_series():
+	ca = []
+	# contractor_series = frappe.db.get_value("Contractor",{'status':'Active'},['employee_series']) or ''
+	contractor_series = frappe.db.get_list('Contractor',filters={'status': 'Active'},fields =['employee_series'])
+	for c in contractor_series:
+		ca.append(c.employee_series)
+	# contractor_series = frappe.db.sql("""select employee_series from `tabContractor` where status ='Active' """)
+	
+	unwanted_list=['50','60','70','80','90']
+	new_list = list(set(ca).difference(unwanted_list))
+	new_list1 = int(max(new_list)) + 1
+
+	print((new_list1))
+	

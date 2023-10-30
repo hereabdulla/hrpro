@@ -28,7 +28,6 @@ frappe.ui.form.on('Induction Test', {
 	validate(frm) {
 		$.each(frm.doc.questions, function (i, d) {
 			if(d.answers== ''){
-				console.log("hi")
 				frappe.throw("Need to fill all rows in answers")
 				frappe.validated =false;
 			}

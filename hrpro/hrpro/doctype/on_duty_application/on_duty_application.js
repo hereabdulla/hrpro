@@ -7,10 +7,37 @@ frappe.ui.form.on('On Duty Application', {
             frm.fields_dict.approval_mark.$wrapper.empty()
             frm.fields_dict.html.$wrapper.empty()
         }
-
     },
-
+    validate(frm) {
+        //     if(frm.doc.from_date){
+        //     var date = frappe.datetime.add_days(frm.doc.from_date,4 )
+        // 	if(frappe.datetime.nowdate() > date){
+        // 		frappe.throw("On Duty should be applied within 4 days")
+        // 	}
+        // }
+        // if (!frappe.user.has_role('HR GM')) {
+        //     if (frm.doc.to_date) {
+        //         frappe.db.get_single_value('HR Time Settings', 'on_duty_validation_dates').then(value=>{
+        //             var date = frappe.datetime.add_days(frm.doc.to_date, value)
+        //             frappe.call({
+        //                 "method": "thaisummit.utils.get_server_date",
+        //                 callback(r) {
+        //                     if (r.message > date) {
+        //                         frappe.msgprint("On Duty should be applied within 3 days")
+        //                         frappe.validated = false;
+        //                     }
+        //                 }
+        //             })
+        //         })
+        //     }
+        // }
+        var multi = frm.doc.multi_employee
+        if (multi.length == 0) {
+            frappe.throw('Please choose at least one Employee')
+        }
+    },
     refresh: function (frm) {
+        frm.ignore_user_permission = false
         frm.fields_dict.html.$wrapper.empty()
         frm.fields_dict.approval_mark.$wrapper.empty()
         if (!frm.is_new()) {
@@ -37,33 +64,39 @@ frappe.ui.form.on('On Duty Application', {
         }
         if (frm.doc.__islocal) {
             frappe.call({
-                "method": "frappe.client.get_value",
+                method: 'hrpro.hrpro.doctype.on_duty_application.on_duty_application.get_employees',
                 args: {
-                    doctype: "Employee",
-                    filters: { "user_id": frappe.session.user },
-                    fieldname: ["name", "employee_name", "department", "designation"]
+
                 },
+                // "method": "frappe.client.get_value",
+                // args: {
+                //     doctype: "Employee",
+                //     filters: { "user_id": frappe.session.user },
+                //     fieldname: ["name", "employee_name", "department", "designation"]
+                // },
                 callback: function (r) {
+                    frm.set_value("employee", r.message[0])
+                    frm.set_value("employee_name", r.message[1])
                     frm.add_child("multi_employee", {
-                        "employee": r.message.name,
-                        "employee_name": r.message.employee_name,
-                        "department": r.message.department,
-                        "designation": r.message.designation
+                        "employee": r.message[0],
+                        "employee_name": r.message[1],
+                        "department": r.message[2],
+                        "designation": r.message[3]
                     })
                     frm.refresh_field('multi_employee')
-                    if (r.message.department) {
+                    if (r.message[2]) {
                         if (frappe.user.has_role('GM')) {
-                            frm.call('get_ceo', { department: r.message.department }).then(r => {
+                            frm.call('get_ceo', { department: r.message[2] }).then(r => {
                                 frm.set_value('approver', r.message)
                             })
                         }
                         else if (frappe.user.has_role('HOD')) {
-                            frm.call('get_gm', { department: r.message.department }).then(r => {
+                            frm.call('get_gm', { department: r.message[2] }).then(r => {
                                 frm.set_value('approver', r.message)
                             })
                         }
                         else {
-                            frm.call('get_hod', { department: r.message.department }).then(r => {
+                            frm.call('get_hod', { department: r.message[2] }).then(r => {
                                 frm.set_value('approver', r.message)
                             })
                         }
@@ -73,8 +106,15 @@ frappe.ui.form.on('On Duty Application', {
         }
     },
     from_date: function (frm) {
+        // if(frm.doc.from_date){
+        // var date = frappe.datetime.add_days(frm.doc.from_date,4 )
+        // if(frappe.datetime.nowdate() > date){
+        // 	frappe.throw("On Duty should be applied within 4 days")
+        // }
+        // }
         frm.trigger('validate_cutoff')
         frm.trigger("calculate_total_days")
+        // frm.trigger("allowed_from_date")
         if (frm.doc.to_date && frm.doc.from_date) {
             if (frm.doc.from_date != frm.doc.to_date) {
                 if (frm.doc.from_date < frm.doc.to_date) {
@@ -90,7 +130,25 @@ frappe.ui.form.on('On Duty Application', {
 
     },
     to_date: function (frm) {
+        // if (!frappe.user.has_role('HR GM')) {
+        //     if (frm.doc.to_date) {
+        //         frappe.db.get_single_value('HR Time Settings', 'on_duty_validation_dates').then(value => {
+        //             var date = frappe.datetime.add_days(frm.doc.to_date, value)
+        //             frappe.call({
+        //                 "method": "thaisummit.utils.get_server_date",
+        //                 callback(r) {
+        //                     if (r.message > date) {
+        //                         frappe.msgprint("On Duty should be applied within 3 days")
+        //                         frappe.validated = false;
+        //                     }
+        //                 }
+        //             })
+        //         })
+
+        //     }
+        // }
         frm.trigger("calculate_total_days")
+        frm.trigger("allowed_from_to_date")
         if (frm.doc.from_date && frm.doc.to_date) {
             if (frm.doc.from_date != frm.doc.to_date) {
                 if (frm.doc.from_date < frm.doc.to_date) {
@@ -103,6 +161,36 @@ frappe.ui.form.on('On Duty Application', {
             }
         }
     },
+    // allowed_from_date(frm) {
+    //     if (frm.doc.from_date) {
+    //         frappe.call({
+    //             method: 'thaisummit.custom.application_allowed_from',
+    //             args: {
+    //                 date: frm.doc.from_date
+    //             },
+    //             callback(r) {
+    //                 if (r.message == 'NO') {
+    //                     frm.set_value('from_date', '')
+    //                 }
+    //             }
+    //         })
+    //     }
+    // },
+    // allowed_from_to_date(frm) {
+    //     if (frm.doc.to_date) {
+    //         frappe.call({
+    //             method: 'thaisummit.custom.application_allowed_from',
+    //             args: {
+    //                 date: frm.doc.to_date
+    //             },
+    //             callback(r) {
+    //                 if (r.message == 'NO') {
+    //                     frm.set_value('to_date', '')
+    //                 }
+    //             }
+    //         })
+    //     }
+    // },
     from_date_session: function (frm) {
         frm.trigger("calculate_total_days")
     },

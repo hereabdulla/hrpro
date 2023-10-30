@@ -14,6 +14,7 @@ from frappe.utils import cint,today,flt,date_diff,add_days,add_months,date_diff,
 from frappe.desk.notifications import delete_notification_count_for
 from frappe import _
 import xml.etree.ElementTree as ET
+from erpnext.hr.utils import get_holiday_dates_for_employee
 # from hrpro.hrpro.report.monthly_absenteesim.monthly_absenteesim import validate_if_attendance_not_applicable    
 from frappe.email.email_body import (replace_filename_with_cid,
     get_email, inline_style_in_html, get_header)
@@ -630,7 +631,6 @@ def log_error(method, message):
 
 @frappe.whitelist()
 def validate_if_attendance_not_applicable(employee, attendance_date):
-    frappe.errprint("hi")
     # Check if attendance_date is a Holiday
     if is_holiday(employee, attendance_date):
         return True
@@ -2052,3 +2052,53 @@ On behalf of every one, I would like to wish %s the best of luck. </p>""" % (emp
 def get_six_month(date):
     ex_date = add_months(date,6)
     return ex_date
+
+
+def create_hooks():
+    job = frappe.db.exists('Scheduled Job Type', 'payroll_date_change_automatic')
+    if not job:
+        sjt = frappe.new_doc("Scheduled Job Type")  
+        sjt.update({
+            "method" : 'hrpro.custom.payroll_date_automatic',
+            "frequency" : 'Cron',
+            "cron_format" : '0 7 26 * *'
+        })
+        sjt.save(ignore_permissions=True)
+        
+@frappe.whitelist()
+def payroll_date_automatic():
+    today = getdate(datetime.now())
+    cur_day = today.day
+    if cur_day == 26:
+        month = today.month
+        month_name = datetime.strftime(today, '%B')
+        next_month = today.month + 1
+        if next_month > 12:
+            next_month = 1
+            year = today.year + 1
+        else:
+            year = today.year
+        next_month_25th = getdate(datetime(year, next_month, 25))
+        frappe.db.set_value('Payroll Dates','PAYROLL OT PERIOD DATE 0001','payroll_start_date',today)
+        frappe.db.set_value('Payroll Dates','PAYROLL OT PERIOD DATE 0001','payroll_end_date',next_month_25th)
+        frappe.db.set_value('Payroll Dates','PAYROLL OT PERIOD DATE 0001','Month',month_name)
+
+
+@frappe.whitelist()
+def qr_checkin():
+    emp = frappe.db.get_value('Employee',{'status':'Active','employee':'TSAI0324'},['name','basic','ctc','employee_type'])
+    start_date = frappe.db.get_value('Payroll Dates',{'name':'PAYROLL OT PERIOD DATE 0001'},['payroll_start_date'])
+    end_date = frappe.db.get_value('Payroll Dates',{'name':'PAYROLL OT PERIOD DATE 0001'},['payroll_end_date'])
+    holidays = len(get_holiday_dates_for_employee(emp[0],start_date,end_date))
+    total_working_days = date_diff(end_date,start_date) - holidays
+    per_day_salary = emp[1] /total_working_days
+    per_day_ctc = emp[2] /total_working_days 
+    print(per_day_salary)
+    print(total_working_days)
+    print(per_day_ctc)
+    print(holidays)
+
+
+
+
+

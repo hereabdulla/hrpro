@@ -26,6 +26,7 @@ frappe.ui.form.on('Compensatory Off Application', {
                 "employee": frm.doc.employee
             },
             callback: function (r) {
+                console.log(r.message)
                 if(r.message != "No Data"){
                     frm.set_value("current_balance", r.message)
                 } else {
