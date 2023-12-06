@@ -25,8 +25,7 @@ class OnDutyApplication(Document):
 			for date in dates:
 				att = frappe.db.exists("Attendance",{"attendance_date":date,"employee":emp.employee,"docstatus":1})
 				if att:
-					frappe.throw(_('Attendance Closed for this %s day %s'%(emp.employee,date)))      
-				
+					frappe.throw(_('Attendance Closed for this %s day %s'%(emp.employee,date)))      	
 
 	def on_submit(self):
 		if self.status == "Applied":
@@ -60,10 +59,24 @@ class OnDutyApplication(Document):
 							doc.employee = emp.employee
 							doc.attendance_date = date
 							doc.status = 'Present'
+							hh = check_holiday(date)
+							if hh:
+								if hh == 'WW':
+									doc.shift_status = "ODW"
+								else:
+									doc.shift_status = "ODH"
+							else:
+								doc.shift_status = "OD"
 							doc.on_duty_application = self.name
 							doc.save(ignore_permissions=True)
 							doc.submit()
 							frappe.db.commit()
+	def on_cancel(self):
+		attendance_list = frappe.get_doc("Attendance", {'employee': self.employee, 'on_duty_application': self.name})
+		if attendance_list:
+			for attendance in attendance_list:
+				attendance_obj = frappe.get_doc("Attendance", attendance['name'])
+				attendance_obj.cancel()
 
 	def after_insert(self):
 		if self.workflow_state == 'Pending for HOD':
@@ -81,18 +94,11 @@ class OnDutyApplication(Document):
 			<tr><th colspan='4' style = 'border: 1px solid black;background-color:#ffedcc;'><center><a href='%s'>VIEW</a></center></th></tr>
 			</table><br>"""%(format_datetime(self.from_date),format_datetime(self.to_date),format_datetime(self.from_time),format_datetime(self.to_time),self.total_number_of_days,self.from_date_session,link)
 			regards = "Thanks & Regards,<br>hrPRO"
-			# frappe.msgprint(content+header+table+data)
 			frappe.sendmail(
 			recipients=[self.approver,'mohan.pan@thaisummit.co.in'],
 			subject='Reg.On Duty Application Approval' ,
 			message = content+header+table+data+regards)
-
-
-
-
-	# def validate(self):
-	#     # self.validate_approver()
-	#     self.validate_od_overlap()	
+	
 	@frappe.whitelist()
 	def show_html(self):
 		if self.vehicle_request:
@@ -158,10 +164,6 @@ class OnDutyApplication(Document):
 		msg = _("Employee {0} has already applied for {1} between {2} and {3}").format(self.employee,
 			d['on_duty_type'], formatdate(d['from_date']), formatdate(d['to_date'])) \
 			+ """ <br><b><a href="#Form/On Duty Application/{0}">{0}</a></b>""".format(d["name"])
-		frappe.throw(msg, OverlapError)
-
-	# @frappe.whitelist()
-	# def get_total_leaves_on_half_day(self):
 		leave_count_on_half_day_date = frappe.db.sql("""select count(name) from `tabOn Duty Application`
 			where employee = %(employee)s
 			and docstatus < 2
@@ -175,13 +177,6 @@ class OnDutyApplication(Document):
 			})[0][0]
 
 		return leave_count_on_half_day_date * 0.5
-
-	# def on_cancel(self):
-	#     attendance_list = frappe.get_list("Attendance", {'employee': self.employee, 'on_duty_application': self.name})
-	#     if attendance_list:
-	#         for attendance in attendance_list:
-	#             attendance_obj = frappe.get_doc("Attendance", attendance['name'])
-	#             attendance_obj.cancel()
 
 	@frappe.whitelist()
 	def get_ceo(self,department):
@@ -332,7 +327,6 @@ def get_employees():
 	data.append(employee[2])
 	data.append(employee[3])
 	return data
-
 
 @frappe.whitelist()
 def check_holiday(date):
